@@ -1,0 +1,28 @@
+<!-- seite2.html -->
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seite 2</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header einbinden -->
+    <div id="header-container"></div>
+
+    <main>
+        <h2>Willkommen auf Seite 2</h2>
+        <p>Dies ist der Inhalt der zweiten Seite.</p>
+    </main>
+
+    <script>
+        // Header dynamisch einbinden
+        fetch('header.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('header-container').innerHTML = data;
+            });
+    </script>
+</body>
+</html>
