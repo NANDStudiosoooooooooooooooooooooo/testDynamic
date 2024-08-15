@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head> 
+    <script src="/scripts/logo2.js" defer></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/styles/index60.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+    <title>Nand Studios - Camel Simulator</title>
+    <!-- Firebase JavaScript SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
+
+    <script type="module">
+        // Initialisierung der Firebase-Module
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js";
+        import { getFirestore, collection, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore.js";
+    
+        // Konfiguration für Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyDBTMH5SzACrkyiXjJKmn646FpZ52te-BE",
+            authDomain: "nand-studios.firebaseapp.com",
+            projectId: "nand-studios",
+            storageBucket: "nand-studios.appspot.com",
+            messagingSenderId: "757182836081",
+            appId: "1:757182836081:web:fcbd06ff53d632bbf7dad0",
+            measurementId: "G-NW0JM7YR07"
+        };
+    
+        // Initialisierung von Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+    
+        // Variablen für die Links
+        let CapyRunMobileDownloadLinkV = '';
+        let CamelSimulatorDownloadLinkV = '';
+        let BananaClickerDownloadLinkV = '';
+        let FallRunDownloadLinkV = '';
+        let WebsiteVersionV = '';
+        let CamelSimulatorVersionV = '';
+        let BananaClickerVersionV = '';
+        let CapyRunVersionV = '';
+    
+        // Abrufen der Links aus der Firestore-Datenbank
+        const downloadDocRef = doc(db, 'links', 'linkdoc');
+        const versionDocRef = doc(db, 'links', 'versiondoc');
+    
+        getDoc(downloadDocRef).then((docSnapshot) => {
+            if (docSnapshot.exists()) {
+                const capyRunData = docSnapshot.data();
+                CapyRunMobileDownloadLinkV = capyRunData.CapyRunMobileDownload;
+                console.log('Firebase-Link:', CapyRunMobileDownloadLinkV); // Logge den Firebase-Link
+                const capyRunButtons = document.querySelectorAll('.CapyRunMobileDownloadButton');
+                capyRunButtons.forEach(button => {
+                    button.href = CapyRunMobileDownloadLinkV;
+                });
+            }
+        });
+
+        getDoc(downloadDocRef).then((docSnapshot) => {
+            if (docSnapshot.exists()) {
+                const camelSimulatorData = docSnapshot.data();
+                CamelSimulatorDownloadLinkV = camelSimulatorData.CamelSimulatorDownload;
+                console.log('Firebase-Link:', CamelSimulatorDownloadLinkV);
+                document.querySelectorAll('.CamelSimulatorDownloadButton').forEach(button => {
+                    button.href = CamelSimulatorDownloadLinkV;
+                });
+            }
+        });
+
+        getDoc(downloadDocRef).then((docSnapshot) => {
+            if (docSnapshot.exists()) {
+                const bananaClickerData = docSnapshot.data();
+                BananaClickerDownloadLinkV = bananaClickerData.BananaClickerDownload;
+                console.log('Firebase-Link BananaClicker:', BananaClickerDownloadLinkV);
+                const bananaClickerDownloadButtons = document.querySelectorAll('.BananaClickerDownloadButton');
+                bananaClickerDownloadButtons.forEach(button => {
+                button.href = BananaClickerDownloadLinkV;
+                });
+            }
+        });
+
+        getDoc(downloadDocRef).then((docSnapshot) => {
+            if (docSnapshot.exists()) {
+                const fallRunData = docSnapshot.data();
+                FallRunDownloadLinkV = fallRunData.FallRunDownload;
+                console.log('Firebase-Link FallRun:', FallRunDownloadLinkV);
+                const fallRunDownloadButtons = document.querySelectorAll('.FallRunDownloadButton');
+                fallRunDownloadButtons.forEach(button => {
+                button.href = FallRunDownloadLinkV;
+                });
+            }
+        });
+
+        getDoc(versionDocRef).then((docSnapshot) => {
+            if (docSnapshot.exists()) {
+                const versionData = docSnapshot.data();
+                WebsiteVersionV = versionData.WebsiteVersion;
+                console.log('Firebase-Link BananaClicker:', WebsiteVersionV);
+                const WebsiteVersionTexts = document.querySelectorAll('.WebsiteVersionText');
+                WebsiteVersionTexts.forEach(button => {
+                button.textContent = WebsiteVersionV;
+                });
+            } 
+        });
+
+        getDoc(versionDocRef).then((docSnapshot) => {
+            if (docSnapshot.exists()) {
+                const versionData = docSnapshot.data();
+                CapyRunVersionV = versionData.CapyRunVersion;
+                console.log('Firebase-Link CapyRun:', CapyRunVersionV);
+                const CapyRunVersionTexts = document.querySelectorAll('.CapyRunVersionText');
+                CapyRunVersionTexts.forEach(button => {
+                button.textContent = CapyRunVersionV;
+                });
+            }
+        });
+
+        getDoc(versionDocRef).then((docSnapshot) => {
+            if (docSnapshot.exists()) {
+                const versionData = docSnapshot.data();
+                CamelSimulatorVersionV = versionData.CamelSimulatorVersion;
+                console.log('Firebase-Link CamelSimulator:', CamelSimulatorVersionV);
+                const CamelSimulatorVersionTexts = document.querySelectorAll('.CamelSimulatorVersionText');
+                CamelSimulatorVersionTexts.forEach(button => {
+                button.textContent = CamelSimulatorVersionV;
+                });
+            }
+        });
+
+        getDoc(versionDocRef).then((docSnapshot) => {
+            if (docSnapshot.exists()) {
+                const versionData = docSnapshot.data();
+                BananaClickerVersionV = versionData.BananaClickerVersion;
+                console.log('Firebase-Link BananaClicker:', BananaClickerVersionV);
+                const BananaClickerVersionTexts = document.querySelectorAll('.BananaClickerVersionText');
+                BananaClickerVersionTexts.forEach(button => {
+                button.textContent = BananaClickerVersionV;
+                });
+            }
+        });
+    </script>
+    <style>
+        body {
+            background-image: url('/media/backg.png');
+            margin: 0;
+            padding: 0;
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        } 
+    </style>
+</head>
+<body>
+
+    
+
+
+    
+    <div class="container">
+        <nav class="navbar">
+            <ul class="nav-links">
+                <a href="https://nand-studios.com/index" id="reload">NAND STUDIOS</a>
+                    <hr class="custom-line-vertical">
+                
+                <li class="nav-link services">
+                    <a >CAMELSIMULATOR
+                        <span class="material-icons dropdown-icon">
+                            arrow_drop_down
+                        </span>
+                    </a>
+                    
+                    <ul class="drop-down">
+                        <iframe frameborder="0" src="/media/CamelIcon.png" width="155" height="155"></iframe>
+                        <a href="https://nand-studios.com/camelsimulator" id="itch">> VIEW</a>
+                    </ul>
+                </li>
+                <li class="nav-link services">
+                    <a >CAPYRUN 
+                        <span class="material-icons dropdown-icon">
+                            arrow_drop_down
+                        </span>
+                    </a>
+                    
+                    <ul class="drop-down">
+                        <iframe frameborder="0" src="/media/CapyRunIcon.png" width="155" height="155"></iframe>
+                        <a href="https://nand-studios.com/capyrun" id="itch">> VIEW</a>  
+                    </ul>
+                </li>
+                <li class="nav-link services">
+                    <a >BANANACLICKER
+                        <span class="material-icons dropdown-icon">
+                            arrow_drop_down
+                        </span>
+                    </a>
+                    
+                    <ul class="drop-down">
+                        <iframe frameborder="0" src="/media/BananaClickerIcon.png" width="155" height="155"></iframe>
+                        <a href="https://nand-studios.com/bananaclicker" id="itch">> VIEW</a>
+                        
+                    </ul>
+                </li>
+                <li id="menu" class="nav-link services">
+                    <a >MENU
+                        <span class="material-icons dropdown-icon">
+                            arrow_drop_down
+                        </span>
+                    </a>
+                    
+                    <ul class="drop-down">
+                        <a href="https://nand-studios.com/camelsimulator" id="itch">CAMELSIMULATOR</a>
+                        <hr class="custom-line">
+                        <a href="https://nand-studios.com/capyrun" id="itch">CAPYRUN</a>
+                        <hr class="custom-line">
+                        <a href="https://nand-studios.com/bananaclicker" id="itch">BANANACLICKER</a>
+                    </ul>
+                </li>
+                <li class="nav-link services">
+                    <a >SUPERMARKET SIMULATOR
+                        <span class="material-icons dropdown-icon">
+                            arrow_drop_down
+                        </span>
+                    </a>
+                    
+                    <ul class="drop-down">
+                        <iframe frameborder="0" src="/media/SupermarketSimulatorIcon.png" width="155" height="155"></iframe>
+                        <a href="https://nand-studios.com/supermarketsimulator" id="itch">> VIEW</a>
+                        
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+        <div id="bottonhead">
+            <a class="GameName" target="_blank">Camel Simulator</a>
+            <a id="text" ></a>
+            <iframe frameborder="0" class="icon" src="/media/windows.svg" width="18" height="18"></iframe>
+            <a class="CamelSimulatorDownloadButton" target="_blank">DOWNLOAD</a>
+            <a id="text" ></a>
+            <a href="https://nandstudios.itch.io/camelsimulator" target="_blank">ITCH-PAGE</a>
+            <a id="text" ></a>
+            <a id="info-text" class="CamelSimulatorVersionText"></a>
+            
+
+         </div>
+         <div id="imagetext">
+            <a></a>
+         </div>
+         
+    </div>
+
+    <div id="logo-container">
+        <div id="logo">
+            Camel Simulator
+        </div>
+    </div>
+
+    <div class="footer">
+        <div>
+            <hr class="custom-line">
+        </div>
+        <div>
+            <a href="mailto:help@nand-studios.com" id="email-button-footer" target="_blank">EMAIL</a>
+            <a href="https://discord.gg/QeBecQ2sbg" id="email-button-footer" target="_blank">DISCORD</a>
+            <a href="https://github.com/NANDStudiosoooooooooooooooooooooo/email" id="email-button-footer" target="_blank">NANDMAIL</a>
+        </div>
+        <div>
+            <hr class="custom-line">
+        </div>
+        <div>
+            <a id="version-text" class="">© NAND STUDIOS 2024</a>
+            <a id="version-text" class="WebsiteVersionText">VERSION:</a>
+        </div>
+    </div>
+</body>
+</html>
