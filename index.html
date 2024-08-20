@@ -46,23 +46,29 @@
   <p id="response"></p>
 
   <script>
-    document.getElementById('emailForm').addEventListener('submit', async (event) => {
-      event.preventDefault();
-
-      const email = document.getElementById('email').value;
-      const forwardTo = document.getElementById('forwardTo').value;
-
-      const response = await fetch('https://mainmail.nand339.workers.dev/', {
+    async function submitForm(event) {
+    event.preventDefault();
+    
+    const email = document.querySelector('#email').value;
+    const forwardTo = document.querySelector('#forwardTo').value;
+    
+    const response = await fetch('https://mainmail.nand339.workers.dev/', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+            'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ email, forwardTo })
-      });
-
-      const result = await response.text();
-      document.getElementById('response').innerText = result;
+        body: JSON.stringify({
+            email: email,
+            forwardTo: forwardTo
+        })
     });
+    
+    const result = await response.text();
+    console.log(result);
+}
+
+document.querySelector('#yourFormId').addEventListener('submit', submitForm);
+
   </script>
 </body>
 </html>
