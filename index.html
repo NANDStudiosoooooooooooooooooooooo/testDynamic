@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>E-Mail-Weiterleitung einrichten</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+    label {
+      margin-top: 10px;
+    }
+    input, button {
+      padding: 10px;
+      margin-top: 5px;
+    }
+    #response {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>E-Mail-Weiterleitung einrichten</h1>
+  <form id="emailForm">
+    <label for="email">E-Mail:</label>
+    <input type="email" id="email" name="email" placeholder="deine@domain.com" required>
+    
+    <label for="forwardTo">Weiterleiten an:</label>
+    <input type="email" id="forwardTo" name="forwardTo" placeholder="ziel@domain.com" required>
+    
+    <button type="submit">Weiterleitung einrichten</button>
+  </form>
+
+  <p id="response"></p>
+
+  <script>
+    document.getElementById('emailForm').addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const email = document.getElementById('email').value;
+      const forwardTo = document.getElementById('forwardTo').value;
+
+      const response = await fetch('https://mainmail.nand339.workers.dev/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email, forwardTo })
+      });
+
+      const result = await response.text();
+      document.getElementById('response').innerText = result;
+    });
+  </script>
+</body>
+</html>
