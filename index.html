@@ -19,7 +19,7 @@
     <h1>Forwarding Form</h1>
     <form id="forwardingForm">
         <label for="email">E-Mail-Adresse:</label>
-        <input type="text" id="email" name="email" placeholder="z.B. example" required>
+        <input type="text" id="email" name="email" placeholder="z.B. example@domain.com" required>
         
         <label for="domain">Domain:</label>
         <select id="domain" name="domain">
@@ -41,10 +41,28 @@
                 const emailPrefix = document.getElementById('email').value;
                 const domain = document.getElementById('domain').value;
                 const forwardTo = document.getElementById('forwardTo').value;
+                const email = `${emailPrefix}@${domain}`;
 
-                const requestBody = JSON.stringify({
-                    email: `${emailPrefix}@${domain}`,
-                    forwardTo: forwardTo
+                const apiRequestBody = JSON.stringify({
+                    "rules": [
+                        {
+                            "priority": 1,
+                            "enabled": true,
+                            "name": `Forward ${email} to ${forwardTo}`,
+                            "actions": [
+                                {
+                                    "type": "forward",
+                                    "value": forwardTo
+                                }
+                            ],
+                            "matchers": [
+                                {
+                                    "type": "recipient",
+                                    "value": email
+                                }
+                            ]
+                        }
+                    ]
                 });
 
                 try {
@@ -53,13 +71,13 @@
                         headers: {
                             'Content-Type': 'application/json'
                         },
-                        body: requestBody
+                        body: apiRequestBody
                     });
 
                     if (response.ok) {
                         const result = await response.json();
                         console.log('Erfolg:', result);
-                        alert('Die E-Mail wurde erfolgreich weitergeleitet.');
+                        alert('Die Regel wurde erfolgreich erstellt.');
                     } else {
                         const error = await response.json();
                         console.error('Fehler:', error);
