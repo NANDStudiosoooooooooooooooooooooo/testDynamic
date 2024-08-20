@@ -4,24 +4,65 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Email Weiterleitung Einrichten</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    form {
+      max-width: 400px;
+      width: 100%;
+    }
+    label, input, select {
+      display: block;
+      margin-bottom: 15px;
+      width: 100%;
+    }
+    button {
+      padding: 10px;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .message {
+      margin-top: 20px;
+      font-size: 1.1em;
+    }
+    .error {
+      color: red;
+    }
+    .success {
+      color: green;
+    }
+  </style>
 </head>
 <body>
   <h1>Email Weiterleitung Einrichten</h1>
   <form id="emailForm">
     <label for="email">Absender Email:</label>
-    <input type="text" id="email" name="email" placeholder="example" required>
-    <br>
+    <input type="text" id="email" name="email" placeholder="example@example.com" required>
+    
     <label for="domain">Domain:</label>
     <select id="domain" name="domain" required>
-      <option value="example.com">nand-studios.com</option>
-      <option value="example.org">mail.nand-studios.com</option>
-      <!-- Füge hier weitere Domains hinzu, falls erforderlich -->
+      <option value="nand-studios.com">nand-studios.com</option>
+      <option value="mail.nand-studios.com">mail.nand-studios.com</option>
+      <!-- Weitere Domains können hier hinzugefügt werden -->
     </select>
-    <br>
+    
     <label for="forwardTo">Weiterleiten an:</label>
     <input type="email" id="forwardTo" name="forwardTo" required>
-    <br>
+    
     <button type="submit">Weiterleitung Einrichten</button>
+    
+    <div id="message" class="message"></div>
   </form>
 
   <script>
@@ -33,9 +74,9 @@
       const forwardTo = document.getElementById('forwardTo').value;
 
       const apiRequestBody = JSON.stringify({
-        "email": email,
-        "domain": domain,
-        "forwardTo": forwardTo
+        email: email,
+        domain: domain,
+        forwardTo: forwardTo
       });
 
       try {
@@ -48,15 +89,19 @@
         });
 
         const result = await response.json();
-        console.log('Result:', result);
+        const messageElement = document.getElementById('message');
+        
         if (response.ok) {
-          alert('Weiterleitung erfolgreich eingerichtet.');
+          messageElement.textContent = 'Weiterleitung erfolgreich eingerichtet.';
+          messageElement.className = 'message success';
         } else {
-          alert('Fehler bei der Einrichtung der Weiterleitung.');
+          messageElement.textContent = `Fehler: ${result.error || 'Unbekannter Fehler'}`;
+          messageElement.className = 'message error';
         }
       } catch (error) {
         console.error('Fehler:', error);
-        alert('Ein Fehler ist aufgetreten.');
+        document.getElementById('message').textContent = 'Ein Fehler ist aufgetreten.';
+        document.getElementById('message').className = 'message error';
       }
     });
   </script>
