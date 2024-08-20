@@ -1,88 +1,76 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>E-Mail-Weiterleitung einrichten</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      max-width: 600px;
-      margin: 0 auto;
-      padding: 20px;
-    }
-    h1 {
-      text-align: center;
-    }
-    form {
-      display: flex;
-      flex-direction: column;
-    }
-    label {
-      margin-top: 10px;
-    }
-    input, select, button {
-      padding: 10px;
-      margin-top: 5px;
-    }
-    #response {
-      margin-top: 20px;
-      font-weight: bold;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forwarding Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        label, select, input {
+            margin-bottom: 10px;
+            display: block;
+        }
+    </style>
 </head>
 <body>
-  <h1>E-Mail-Weiterleitung einrichten</h1>
-  <form id="emailForm">
-    <label for="localPart">E-Mail (vor @):</label>
-    <input type="text" id="localPart" name="localPart" placeholder="deine" required>
-    
-    <label for="domain">E-Mail-Domain:</label>
-    <select id="domain" name="domain">
-      <option value="mail.nand-studios.com">mail.nand-studios.com</option>
-      <option value="nand-studios.com" selected>nand-studios.com</option>
-    </select>
-    
-    <label for="forwardTo">Weiterleiten an:</label>
-    <input type="email" id="forwardTo" name="forwardTo" placeholder="ziel@domain.com" required>
-    
-    <button type="submit">Weiterleitung333 einrichten</button>
-  </form>
+    <h1>Forwarding Form</h1>
+    <form id="forwardingForm">
+        <label for="email">E-Mail-Adresse:</label>
+        <input type="text" id="email" name="email" placeholder="z.B. example" required>
+        
+        <label for="domain">Domain:</label>
+        <select id="domain" name="domain">
+            <option value="nand-studios.com" selected>nand-studios.com</option>
+            <option value="mail.nand-studios.com">mail.nand-studios.com</option>
+        </select>
+        
+        <label for="forwardTo">Weiterleiten an:</label>
+        <input type="email" id="forwardTo" name="forwardTo" placeholder="ziel@example.com" required>
 
-  <p id="response"></p>
+        <button type="submit">Absenden</button>
+    </form>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('forwardingForm').addEventListener('submit', async function(event) {
-      event.preventDefault();
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('forwardingForm').addEventListener('submit', async function(event) {
+                event.preventDefault();
 
-      const email = document.getElementById('email').value;
-      const forwardTo = document.getElementById('forwardTo').value;
+                const emailPrefix = document.getElementById('email').value;
+                const domain = document.getElementById('domain').value;
+                const forwardTo = document.getElementById('forwardTo').value;
 
-      const requestBody = JSON.stringify({
-        email: email,
-        forwardTo: forwardTo
-      });
+                const requestBody = JSON.stringify({
+                    email: `${emailPrefix}@${domain}`,
+                    forwardTo: forwardTo
+                });
 
-      try {
-        const response = await fetch('https://mainmail.nand339.workers.dev/', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: requestBody
+                try {
+                    const response = await fetch('https://mainmail.nand339.workers.dev/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: requestBody
+                    });
+
+                    if (response.ok) {
+                        const result = await response.json();
+                        console.log('Erfolg:', result);
+                        alert('Die E-Mail wurde erfolgreich weitergeleitet.');
+                    } else {
+                        const error = await response.json();
+                        console.error('Fehler:', error);
+                        alert('Ein Fehler ist aufgetreten. Bitte versuche es erneut.');
+                    }
+                } catch (error) {
+                    console.error('Netzwerkfehler:', error);
+                    alert('Ein Netzwerkfehler ist aufgetreten. Bitte überprüfe deine Verbindung.');
+                }
+            });
         });
-
-        const responseText = await response.text();
-        if (response.ok) {
-          alert('E-Mail-Weiterleitung erfolgreich eingerichtet!');
-        } else {
-          alert(`Fehler: ${responseText}`);
-        }
-      } catch (error) {
-        alert(`Fehler beim Senden der Anfrage: ${error.message}`);
-      }
-    });
-  </script>
+    </script>
 </body>
 </html>
