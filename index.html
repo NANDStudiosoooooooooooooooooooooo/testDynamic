@@ -17,9 +17,9 @@
 </head>
 <body>
     <h1>Forwarding Form</h1>
-   <form id="forwardingForm">
-        <label for="email">E-Mail-Adresse:</label>
-        <input type="text" id="email" name="email" placeholder="z.B. example" required>
+    <form id="forwardingForm">
+        <label for="email">E-Mail-Benutzername:</label>
+        <input type="text" id="email" name="email" placeholder="z.B. test" required>
         
         <label for="domain">Domain:</label>
         <select id="domain" name="domain">
@@ -34,61 +34,55 @@
     </form>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('forwardingForm').addEventListener('submit', async function(event) {
-                event.preventDefault();
+        document.getElementById('forwardingForm').addEventListener('submit', async function(event) {
+            event.preventDefault()
+            
+            const formData = new FormData(event.target)
+            const username = formData.get('email')
+            const domain = formData.get('domain')
+            const emailAddress = `${username}@${domain}`
 
-                const emailPrefix = document.getElementById('email').value;
-                const domain = document.getElementById('domain').value;
-                const forwardTo = document.getElementById('forwardTo').value;
-                const email = `${emailPrefix}@${domain}`;
-
-                const apiRequestBody = JSON.stringify({
-                    "rules": [
-                        {
-                            "priority": 1,
-                            "enabled": true,
-                            "name": `Forward ${email} to ${forwardTo}`,
-                            "actions": [
-                                {
-                                    "type": "forward",
-                                    "value": forwardTo
-                                }
-                            ],
-                            "matchers": [
-                                {
-                                    "type": "recipient",
-                                    "value": email
-                                }
-                            ]
-                        }
-                    ]
-                });
-
-                try {
-                    const response = await fetch('https://mainmail.nand339.workers.dev/', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: apiRequestBody
-                    });
-
-                    if (response.ok) {
-                        const result = await response.json();
-                        console.log('Erfolg:', result);
-                        alert('Die Regel wurde erfolgreich erstellt.');
-                    } else {
-                        const error = await response.json();
-                        console.error('Fehler:', error);
-                        alert('Ein Fehler ist aufgetreten. Bitte versuche es erneut.');
+            const data = {
+                rules: [
+                    {
+                        priority: 1,
+                        enabled: true,
+                        name: 'Example Rule',
+                        actions: [
+                            {
+                                type: 'forward',
+                                value: formData.get('forwardTo')
+                            }
+                        ],
+                        matchers: [
+                            {
+                                type: 'recipient',
+                                value: emailAddress
+                            }
+                        ]
                     }
-                } catch (error) {
-                    console.error('Netzwerkfehler:', error);
-                    alert('Ein Netzwerkfehler ist aufgetreten. Bitte überprüfe deine Verbindung.');
+                ]
+            }
+
+            try {
+                const response = await fetch('https://mainmail.nand339.workers.dev/', { // URL deines Cloudflare Workers
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                })
+
+                if (response.ok) {
+                    alert('Regel erfolgreich erstellt')
+                } else {
+                    const errorText = await response.text()
+                    alert(`Fehler: ${errorText}`)
                 }
-            });
-        });
+            } catch (error) {
+                alert(`Fehler: ${error.message}`)
+            }
+        })
     </script>
 </body>
 </html>
